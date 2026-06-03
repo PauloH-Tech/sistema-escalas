@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class EscalaExtraService {
 
@@ -26,9 +28,7 @@ public class EscalaExtraService {
     @Transactional
     public EscalaExtra cadastrar(EscalaExtraDTO escalaExtra){
         Militar militar = militarRepository.getReferenceById(escalaExtra.militarId());
-
-        //TODO: Refatorar para buscar pelo id (getReferenceById)
-        RodadaEscala rodadaEscala = rodadaRepository.findByNumeroRodada(escalaExtra.rodadaId());
+        RodadaEscala rodadaEscala = rodadaRepository.getReferenceById(escalaExtra.rodadaId());
 
         EscalaExtra escala = new EscalaExtra();
         escala.setMilitar(militar);

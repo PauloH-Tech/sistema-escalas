@@ -1,4 +1,6 @@
 package br.com.paulo.entities.escalas;
 
-public record EscalaExtraDTO(Long militarId, Long rodadaId) {
+import java.util.UUID;
+
+public record EscalaExtraDTO(UUID militarId, UUID rodadaId) {
 }

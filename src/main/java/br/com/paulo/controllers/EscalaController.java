@@ -3,7 +3,7 @@ package br.com.paulo.controllers;
 import br.com.paulo.entities.escalas.EscalaExtra;
 import br.com.paulo.entities.escalas.EscalaExtraDTO;
 import br.com.paulo.entities.militares.MilitarPrioridadeDTO;
-import br.com.paulo.repositories.MilitarRepository;
+import br.com.paulo.repositories.EscalaExtraRepository;
 import br.com.paulo.services.EscalaExtraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,10 @@ public class EscalaController {
 
     @Autowired
     private EscalaExtraService escalaService;
+
     @Autowired
-    private MilitarRepository repository;
+    private EscalaExtraRepository escalaExtraRepository;
+
 
     @PostMapping
     public ResponseEntity<?> cadatrarEscala(@RequestBody EscalaExtraDTO body){
@@ -29,7 +31,7 @@ public class EscalaController {
 
     @GetMapping
     public ResponseEntity<List<MilitarPrioridadeDTO>> proximosPoliciais(){
-        List<MilitarPrioridadeDTO> listaOrdenada = repository.listaOrdenada();
+        List<MilitarPrioridadeDTO> listaOrdenada = escalaExtraRepository.listaOrdenada();
         return ResponseEntity.ok(listaOrdenada);
     }
 

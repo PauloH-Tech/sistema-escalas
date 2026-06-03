@@ -1,6 +1,6 @@
 package br.com.paulo.entities.afastamentos;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-public record AfastamentoDTO(Long militarId, Date dtInicio, Date dtFim) {
+public record AfastamentoDTO(TipoAfastamento tpAfastamento, LocalDate dtInicio, LocalDate dtFim) {
 }

@@ -13,11 +13,11 @@ public class RodadaService {
     private RodadaRepository repository;
 
     public void cadastrarRodada(RodadaDTO dto){
-        int nrRodada = repository.findMaxNumeroRodada() + 1;
+        //int nrRodada = repository.findMaxNumeroRodada() + 1;
 
         RodadaEscala novaRodada = new RodadaEscala();
         novaRodada.setData(dto.data());
-        novaRodada.setNumeroRodada(nrRodada);
+        //novaRodada.setNumeroRodada(nrRodada);
 
         repository.save(novaRodada);
     }

@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "rodada_escala")
@@ -15,17 +16,19 @@ import java.util.List;
 public class RodadaEscala {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @Column(nullable = false)
     private LocalDate data;
 
-    @Column(name = "nr_rodada")
-    private int numeroRodada;
+//    @Column(name = "nr_rodada", nullable = false)
+//    private int numeroRodada;
 
     @OneToMany(mappedBy = "rodada")
     @JsonIgnore
     private List<EscalaExtra> escalados;
+
 
 }

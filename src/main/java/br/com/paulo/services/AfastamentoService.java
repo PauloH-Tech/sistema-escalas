@@ -8,6 +8,8 @@ import br.com.paulo.repositories.MilitarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class AfastamentoService {
 
@@ -18,15 +20,16 @@ public class AfastamentoService {
     private MilitarRepository militarRepository;
 
 
-    public Afastamento cadastrarAfastamento(AfastamentoDTO dto){
-        Militar militar = militarRepository.getReferenceById(dto.militarId());
+    public void cadastrarAfastamento(UUID idMilitar, AfastamentoDTO dto){
+        Militar militar = militarRepository.findById(idMilitar).orElse(null);
 
         Afastamento novoAfastamento = new Afastamento();
         novoAfastamento.setMilitar(militar);
+        novoAfastamento.setTpAfastamento(dto.tpAfastamento());
         novoAfastamento.setDtInicio(dto.dtInicio());
         novoAfastamento.setDtFim(dto.dtFim());
 
-        return afastamentoRepository.save(novoAfastamento);
+        afastamentoRepository.save(novoAfastamento);
     }
 
 

@@ -19,11 +19,12 @@ public class MilitarService {
         return repository.findAll();
     }
 
-    public Militar cadastrar(MilitarDTO dto) {
+    public void cadastrar(MilitarDTO dto) {
         Militar militar = new Militar();
         militar.setNome(dto.nome());
         militar.setSt_ativo(dto.stAtivo());
+        militar.setPatente(dto.patente());
 
-        return repository.save(militar);
+        repository.save(militar);
     }
 }
