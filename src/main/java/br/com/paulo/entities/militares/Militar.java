@@ -21,7 +21,6 @@ public class Militar {
     private Boolean st_ativo;
 
 
-    @Column(name = "patente")
     private Graduacao graduacao;
 
 }

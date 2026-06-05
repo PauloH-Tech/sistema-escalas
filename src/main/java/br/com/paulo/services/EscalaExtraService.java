@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EscalaExtraService {
@@ -26,14 +29,17 @@ public class EscalaExtraService {
 
 
     @Transactional
-    public EscalaExtra cadastrar(EscalaExtraDTO escalaExtra){
-        Militar militar = militarRepository.getReferenceById(escalaExtra.militarId());
-        RodadaEscala rodadaEscala = rodadaRepository.getReferenceById(escalaExtra.rodadaId());
+    public void cadastrar(EscalaExtraDTO escalados){
+        RodadaEscala rodadaEscala = rodadaRepository.getReferenceById(escalados.rodadaId());
 
-        EscalaExtra escala = new EscalaExtra();
-        escala.setMilitar(militar);
-        escala.setRodada(rodadaEscala);
-        return escalaRepository.save(escala);
+        for (UUID militarEscalado : escalados.militarId()){
+            Militar militar = militarRepository.getReferenceById(militarEscalado);
+
+            EscalaExtra escala = new EscalaExtra();
+            escala.setMilitar(militar);
+            escala.setRodada(rodadaEscala);
+            escalaRepository.save(escala);
+        }
     }
 
 
