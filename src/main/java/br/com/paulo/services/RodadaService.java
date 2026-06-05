@@ -6,6 +6,8 @@ import br.com.paulo.repositories.RodadaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RodadaService {
 
@@ -22,4 +24,7 @@ public class RodadaService {
         repository.save(novaRodada);
     }
 
+    public List<RodadaEscala> listarProximasRodadas() {
+        return repository.findNextRodadas();
+    }
 }
