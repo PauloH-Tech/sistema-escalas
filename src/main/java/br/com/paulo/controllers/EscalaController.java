@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -29,9 +30,9 @@ public class EscalaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(escalaExtra);
     }
 
-    @GetMapping
-    public ResponseEntity<List<MilitarPrioridadeDTO>> proximosPoliciais(){
-        List<MilitarPrioridadeDTO> listaOrdenada = escalaExtraRepository.listaOrdenada();
+    @GetMapping("/{date}")
+    public ResponseEntity<List<MilitarPrioridadeDTO>> proximosPoliciais(@PathVariable LocalDate date){
+        List<MilitarPrioridadeDTO> listaOrdenada = escalaExtraRepository.listaOrdenada(date);
         return ResponseEntity.ok(listaOrdenada);
     }
 

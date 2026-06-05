@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/fastamento")
+@RequestMapping("/afastamento")
 public class AfastamentoController {
 
     @Autowired
@@ -22,7 +22,7 @@ public class AfastamentoController {
     private AfastamentoService afastamentoService;
 
 
-    @PostMapping("/afastamento/{idMilitar}")
+    @PostMapping("/{idMilitar}")
     public ResponseEntity<?> afastarMilitar(@PathVariable UUID idMilitar, @RequestBody AfastamentoDTO body){
         afastamentoService.cadastrarAfastamento(idMilitar, body);
         return ResponseEntity.status(HttpStatus.CREATED).build();

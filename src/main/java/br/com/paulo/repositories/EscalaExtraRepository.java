@@ -5,8 +5,10 @@ import br.com.paulo.entities.militares.Militar;
 import br.com.paulo.entities.militares.MilitarPrioridadeDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,9 +35,15 @@ public interface EscalaExtraRepository extends JpaRepository<EscalaExtra, UUID> 
     @Query(value = """
             SELECT m.id,
                    m.nm_militar,
-                   m.patente,
+                   m.graduacao,
                    MAX(r.data) AS ultima_escala,
-                   a.tp_afastamento AS tipo_afastamento
+                   a.tp_afastamento AS tipo_afastamento,
+                   COUNT(
+                       CASE
+                           WHEN r.data >= CURRENT_DATE - INTERVAL '90 days'
+                           THEN 1
+                       END
+                   ) AS qt_escalas
               FROM militares m
               LEFT JOIN escala_extra e
                 ON e.militar_id = m.id
@@ -43,16 +51,19 @@ public interface EscalaExtraRepository extends JpaRepository<EscalaExtra, UUID> 
                 ON r.id = e.rodada_id
               LEFT JOIN afastamento a
                 ON a.militar_id = m.id
-               AND CURRENT_DATE BETWEEN a.dt_inicio AND a.dt_fim
+               AND :dataRodada BETWEEN a.dt_inicio AND a.dt_fim
              GROUP BY
                    m.id,
                    m.nm_militar,
-                   m.patente,
+                   m.graduacao,
                    a.tp_afastamento
              ORDER BY
                    ultima_escala ASC NULLS FIRST,
-                   m.patente;
+                   qt_escalas,
+                   m.graduacao;
             """, nativeQuery = true)
-    List<MilitarPrioridadeDTO> listaOrdenada();
+    List<MilitarPrioridadeDTO> listaOrdenada(
+            @Param(value = "dataRodada")LocalDate dataRodada
+            );
 
 }

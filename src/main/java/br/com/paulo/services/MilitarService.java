@@ -23,7 +23,7 @@ public class MilitarService {
         Militar militar = new Militar();
         militar.setNome(dto.nome());
         militar.setSt_ativo(dto.stAtivo());
-        militar.setPatente(dto.patente());
+        militar.setGraduacao(dto.graduacao());
 
         repository.save(militar);
     }

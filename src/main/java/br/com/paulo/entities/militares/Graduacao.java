@@ -1,6 +1,6 @@
 package br.com.paulo.entities.militares;
 
-public enum Patente {
+public enum Graduacao {
     SOLDADO(1),
     CABO(2),
     TERCEIRO_SARGENTO(3),
@@ -11,7 +11,7 @@ public enum Patente {
 
     private final int codigo;
 
-    Patente(int codigo) {
+    Graduacao(int codigo) {
         this.codigo = codigo;
     }
 
@@ -19,8 +19,8 @@ public enum Patente {
         return codigo;
     }
 
-    public static Patente fromCodigo(int codigo) {
-        for (Patente p : values()) {
+    public static Graduacao fromCodigo(int codigo) {
+        for (Graduacao p : values()) {
             if (p.codigo == codigo) {
                 return p;
             }
