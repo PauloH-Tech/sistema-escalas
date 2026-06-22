@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class MilitarService {
@@ -16,7 +18,7 @@ public class MilitarService {
 
 
     public List<Militar> listarMilitares() {
-        return repository.findAll();
+        return repository.findAllByOrderByGraduacaoDesc();
     }
 
     public void cadastrar(MilitarDTO dto) {
@@ -26,5 +28,24 @@ public class MilitarService {
         militar.setGraduacao(dto.graduacao());
 
         repository.save(militar);
+    }
+
+    public void atualizar(UUID id, MilitarDTO dto) {
+        Militar militar = repository.findById(id).orElseThrow(() -> new RuntimeException("Militar não encontrado"));
+
+        if (militar != null){
+            militar.setNome(dto.nome());
+            militar.setGraduacao(dto.graduacao());
+            militar.setSt_ativo(dto.stAtivo());
+
+            repository.save(militar);
+        }
+    }
+
+    public void deletar(UUID id) {
+        Militar militar = repository.findById(id).orElseThrow(() -> new RuntimeException("Militar não encontrado"));
+        if (militar != null) {
+            repository.deleteById(id);
+        }
     }
 }

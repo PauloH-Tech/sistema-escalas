@@ -20,7 +20,6 @@ public class Militar {
     @Column(nullable = false)
     private Boolean st_ativo;
 
-
     private Graduacao graduacao;
 
 }
