@@ -1,6 +1,7 @@
 package br.com.paulo.entities.militares;
 
 public enum Graduacao {
+    OUTROS(0),
     SOLDADO(1),
     CABO(2),
     TERCEIRO_SARGENTO(3),

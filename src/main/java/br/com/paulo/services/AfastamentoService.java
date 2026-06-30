@@ -5,9 +5,11 @@ import br.com.paulo.entities.afastamentos.AfastamentoDTO;
 import br.com.paulo.entities.militares.Militar;
 import br.com.paulo.repositories.AfastamentoRepository;
 import br.com.paulo.repositories.MilitarRepository;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -33,4 +35,7 @@ public class AfastamentoService {
     }
 
 
+    public List<Afastamento> listar() {
+        return afastamentoRepository.findAll();
+    }
 }

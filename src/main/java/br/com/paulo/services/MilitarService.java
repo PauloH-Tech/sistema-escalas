@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -21,13 +20,15 @@ public class MilitarService {
         return repository.findAllByOrderByGraduacaoDesc();
     }
 
-    public void cadastrar(MilitarDTO dto) {
+    public UUID cadastrar(MilitarDTO dto) {
         Militar militar = new Militar();
         militar.setNome(dto.nome());
         militar.setSt_ativo(dto.stAtivo());
         militar.setGraduacao(dto.graduacao());
 
         repository.save(militar);
+
+        return militar.getId();
     }
 
     public void atualizar(UUID id, MilitarDTO dto) {

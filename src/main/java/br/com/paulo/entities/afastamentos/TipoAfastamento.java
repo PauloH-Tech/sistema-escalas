@@ -4,4 +4,5 @@ public enum TipoAfastamento {
     FERIAS,
     LICENCA,
     ATESTADO,
+    OUTROS,
 }

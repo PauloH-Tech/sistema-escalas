@@ -25,8 +25,7 @@ public class MilitarController {
 
     @PostMapping
     public ResponseEntity<?> cadatrarMilitar(@RequestBody MilitarDTO dto) {
-        service.cadastrar(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.cadastrar(dto));
     }
 
     @PutMapping("/{id}")

@@ -19,7 +19,7 @@ public class RodadaEscala {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Column(nullable = false)
     private LocalDate data;
 

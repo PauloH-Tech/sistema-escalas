@@ -16,14 +16,18 @@ import java.util.UUID;
 public class AfastamentoController {
 
     @Autowired
-    private MilitarRepository militarRepository;
-
-    @Autowired
     private AfastamentoService afastamentoService;
+
+    @GetMapping
+    public ResponseEntity<?> listaAfastametos() {
+        return ResponseEntity.ok(afastamentoService.listar());
+    }
 
 
     @PostMapping("/{idMilitar}")
     public ResponseEntity<?> afastarMilitar(@PathVariable UUID idMilitar, @RequestBody AfastamentoDTO body){
+        System.out.println("id: " + idMilitar);
+        System.out.println("body: " + body);
         afastamentoService.cadastrarAfastamento(idMilitar, body);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

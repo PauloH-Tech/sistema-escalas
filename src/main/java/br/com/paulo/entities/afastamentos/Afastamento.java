@@ -22,15 +22,13 @@ public class Afastamento {
     @Column(nullable = false)
     private TipoAfastamento tpAfastamento;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false)
     private Militar militar;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @Column(nullable = false)
     private LocalDate dtInicio;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @Column(nullable = false)
     private LocalDate dtFim;
 
