@@ -25,11 +25,12 @@ public class MilitarController {
 
     @PostMapping
     public ResponseEntity<?> cadatrarMilitar(@RequestBody MilitarDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.cadastrar(dto));
+        service.cadastrar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarMilitar(@PathVariable UUID id, @RequestBody MilitarDTO dto){
+    public ResponseEntity<?> atualizarMilitar(@PathVariable UUID id, @RequestBody MilitarDTO dto){
         service.atualizar(id, dto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

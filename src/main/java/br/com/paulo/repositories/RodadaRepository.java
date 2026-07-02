@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,8 @@ public interface RodadaRepository extends JpaRepository<RodadaEscala, UUID> {
             ORDER BY re.data;
             """, nativeQuery = true)
     List<RodadaEscala> findNextRodadas();
+
+    boolean existsByData(LocalDate date);
 
 //    @Query("SELECT MAX(p.numeroRodada) FROM RodadaEscala p")
 //    int findMaxNumeroRodada();

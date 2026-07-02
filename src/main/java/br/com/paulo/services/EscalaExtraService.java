@@ -3,7 +3,9 @@ package br.com.paulo.services;
 import br.com.paulo.entities.escalas.EscalaExtra;
 import br.com.paulo.entities.escalas.EscalaExtraDTO;
 import br.com.paulo.entities.militares.Militar;
+import br.com.paulo.entities.militares.MilitarPrioridadeDTO;
 import br.com.paulo.entities.rodadas.RodadaEscala;
+import br.com.paulo.exceptions.RodadaNotFoundException;
 import br.com.paulo.repositories.EscalaExtraRepository;
 import br.com.paulo.repositories.MilitarRepository;
 import br.com.paulo.repositories.RodadaRepository;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +35,7 @@ public class EscalaExtraService {
     public void cadastrar(EscalaExtraDTO escalados){
         RodadaEscala rodadaEscala = rodadaRepository.getReferenceById(escalados.rodadaId());
 
-        for (UUID militarEscalado : escalados.militarId()){
+        for (UUID militarEscalado : escalados.militarIds()){
             Militar militar = militarRepository.getReferenceById(militarEscalado);
 
             EscalaExtra escala = new EscalaExtra();
@@ -43,4 +46,12 @@ public class EscalaExtraService {
     }
 
 
+    public List<MilitarPrioridadeDTO> listarMilitaresOrdenados(LocalDate date) {
+        boolean existsRodada = rodadaRepository.existsByData(date);
+        if (existsRodada) {
+            return escalaRepository.listaOrdenada(date);
+        }
+
+        throw new RodadaNotFoundException(date.toString());
+    }
 }

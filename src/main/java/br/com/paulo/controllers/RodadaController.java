@@ -26,9 +26,14 @@ public class RodadaController {
     }
 
     @GetMapping
+    public ResponseEntity<List<RodadaEscala>> listar(){
+        List<RodadaEscala> escalas = service.listarTodas();
+        return ResponseEntity.ok(escalas);
+    }
+
+    @GetMapping("/proximas")
     public ResponseEntity<List<RodadaEscala>> proximasRodadas(){
         List<RodadaEscala> nextEscalas = service.listarProximasRodadas();
-
         return ResponseEntity.ok(nextEscalas);
     }
 

@@ -27,4 +27,8 @@ public class RodadaService {
     public List<RodadaEscala> listarProximasRodadas() {
         return repository.findNextRodadas();
     }
+
+    public List<RodadaEscala> listarTodas() {
+        return repository.findAll();
+    }
 }

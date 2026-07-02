@@ -32,7 +32,7 @@ public class EscalaController {
 
     @GetMapping("/{date}")
     public ResponseEntity<List<MilitarPrioridadeDTO>> proximosPoliciais(@PathVariable LocalDate date){
-        List<MilitarPrioridadeDTO> listaOrdenada = escalaExtraRepository.listaOrdenada(date);
+        List<MilitarPrioridadeDTO> listaOrdenada = escalaService.listarMilitaresOrdenados(date);
         return ResponseEntity.ok(listaOrdenada);
     }
 
