@@ -3,23 +3,11 @@ spring:
     name: controle-escalas
   profiles:
     active: development
-  datasource:
-    url: jdbc:h2:file:./dados/escala
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
 
-server:
-  port: 8082
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#server:
+#  port: 8082
 
 
 
@@ -29,12 +17,15 @@ spring:
     activate:
       on-profile: production
   datasource:
-    url: jdbc:postgresql://localhost:5432/roster
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5433/roster}
     driver-class-name: org.postgresql.Driver
-    password: postgresadmin
-    username: postgres
+    password: ${DATASOURCE_PASSWORD:postgresprod}
+    username: ${DATASOURCE_USERNAME:postgresprod}
+    hibernate:
+      ddl-auto: none
   jpa:
-    show-sql: true
+    show-sql: false
+
 
 ---
 spring:
@@ -46,10 +37,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     password: postgresadmin
     username: postgres
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
   output:
     ansi:
