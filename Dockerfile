@@ -12,11 +12,6 @@ COPY --from=build ./build/target/*.jar ./app.jar
 
 EXPOSE 8080
 
-ENV DATASOURCE_URL=''
-ENV DATASOURCE_PASSWORD=''
-ENV DATASOURCE_USERNAME=''
-
-ENV SPRING_PROFILES_ACTIVE='production'
 ENV TZ='America/Sao_Paulo'
 
-ENTRYPOINT java -jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
