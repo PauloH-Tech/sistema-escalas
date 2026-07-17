@@ -27,7 +27,7 @@ public class RodadaEscala {
 //    private int numeroRodada;
 
     @OneToMany(mappedBy = "rodada")
-    @JsonIgnore
+//    @JsonIgnore
     private List<EscalaExtra> escalados;
 
 

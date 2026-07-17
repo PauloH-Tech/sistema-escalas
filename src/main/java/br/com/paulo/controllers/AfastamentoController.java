@@ -26,8 +26,8 @@ public class AfastamentoController {
 
     @PostMapping("/{idMilitar}")
     public ResponseEntity<?> afastarMilitar(@PathVariable UUID idMilitar, @RequestBody AfastamentoDTO body){
-        System.out.println("id: " + idMilitar);
-        System.out.println("body: " + body);
+//        System.out.println("id: " + idMilitar);
+//        System.out.println("body: " + body);
         afastamentoService.cadastrarAfastamento(idMilitar, body);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
