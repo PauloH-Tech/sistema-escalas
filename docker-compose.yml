@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16.3
+    container_name: db-roster
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "roster"
+    ports:
+      - "5432:5432"
+
+  api:
+    build: .
+    container_name: roster-api
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      DATASOURCE_URL:  ${DATASOURCE_URL}
+      DATASOURCE_PASSWORD:  ${DATASOURCE_PASSWORD}
+      DATASOURCE_USERNAME:  ${DATASOURCE_USERNAME}
+    ports:
+      - ${SERVER_PORT:-8080}:8080
+    depends_on:
+      - db

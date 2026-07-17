@@ -34,10 +34,10 @@ spring:
     activate:
       on-profile: development
   datasource:
-    url: jdbc:postgresql://localhost:5432/roster
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/roster}
     driver-class-name: org.postgresql.Driver
-    password: postgresadmin
-    username: postgres
+    password:  ${DATASOURCE_PASSWORD:postgresadmin}
+    username: ${DATASOURCE_USERNAME:postgres}
     hibernate:
       ddl-auto: none
     show-sql: true
