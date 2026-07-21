@@ -2,7 +2,7 @@ spring:
   application:
     name: controle-escalas
   profiles:
-    active: production
+    active: ${SPRING_PROFILES_ACTIVE}
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -18,10 +18,10 @@ spring:
     activate:
       on-profile: production
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5433/roster}
+    url: ${DATASOURCE_URL}
     driver-class-name: org.postgresql.Driver
-    password: ${DATASOURCE_PASSWORD:postgresprod}
-    username: ${DATASOURCE_USERNAME:postgresprod}
+    password: ${DATASOURCE_PASSWORD}
+    username: ${DATASOURCE_USERNAME}
     hibernate:
       ddl-auto: none
   jpa:
@@ -36,7 +36,7 @@ spring:
   datasource:
     url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/roster}
     driver-class-name: org.postgresql.Driver
-    password:  ${DATASOURCE_PASSWORD:postgresadmin}
+    password:  ${DATASOURCE_PASSWORD:postgres}
     username: ${DATASOURCE_USERNAME:postgres}
     hibernate:
       ddl-auto: none
