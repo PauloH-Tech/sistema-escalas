@@ -1,5 +1,6 @@
 package br.com.paulo.escalas.services;
 
+import br.com.paulo.email.entities.services.EmailOutboxService;
 import br.com.paulo.escalas.entities.escalas.EscalaExtra;
 import br.com.paulo.escalas.entities.escalas.EscalaExtraDTO;
 import br.com.paulo.escalas.entities.militares.Militar;
@@ -27,6 +28,8 @@ public class EscalaExtraService {
     private MilitarRepository militarRepository;
     @Autowired
     private RodadaRepository rodadaRepository;
+    @Autowired
+    private EmailOutboxService emailOutboxService;
 
 
     @Transactional
@@ -40,6 +43,9 @@ public class EscalaExtraService {
             escala.setMilitar(militar);
             escala.setRodada(rodadaEscala);
             escalaRepository.save(escala);
+
+            emailOutboxService.salvarEmail(escala);
+
         }
     }
 

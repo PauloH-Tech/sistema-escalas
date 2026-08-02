@@ -1,0 +1,34 @@
+package br.com.paulo.email.entities.services;
+
+import br.com.paulo.email.entities.EmailOutbox;
+import br.com.paulo.email.entities.EmailStatus;
+import br.com.paulo.email.entities.repositories.EmailRepository;
+import br.com.paulo.escalas.entities.escalas.EscalaExtra;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Service
+@RequiredArgsConstructor
+public class EmailOutboxService {
+
+    private final EmailTemplateService templateService;
+    private final EmailRepository emailRepository;
+
+
+    public void salvarEmail(EscalaExtra escala) {
+        EmailOutbox email = new EmailOutbox();
+        email.setTo("paulohsantos2005@gmail.com");
+//        email.setTo(escala.getMilitar().getEmail());
+//        se precisar mandar cc -> colocar o escalador;
+        email.setBody(templateService.montarTemplateEscala(escala));
+        email.setDataCriacao(LocalDateTime.now());
+        email.setStatus(EmailStatus.PENDENTE);
+
+        emailRepository.save(email);
+
+    }
+}
