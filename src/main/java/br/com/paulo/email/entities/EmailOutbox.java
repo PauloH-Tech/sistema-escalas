@@ -1,0 +1,26 @@
+package br.com.paulo.email.entities;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Entity
+public class EmailOutbox {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    private String to;
+    private String cc;
+    private String subject;
+    @Column(columnDefinition = "TEXT")
+    private String body;
+    private int tentativas;
+    private EmailStatus status;
+    private LocalDateTime dataCriacao;
+    private LocalDateTime dataEnvio;
+    @Column(columnDefinition = "TEXT")
+    private String erro;
+
+}
