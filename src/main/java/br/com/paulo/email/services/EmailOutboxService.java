@@ -26,6 +26,7 @@ public class EmailOutboxService {
         email.setDataCriacao(LocalDateTime.now());
         email.setStatus(EmailStatus.PENDENTE);
 
+        System.out.println(email);
         emailRepository.save(email);
 
     }

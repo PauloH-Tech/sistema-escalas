@@ -13,18 +13,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailSenderService {
 
-    private final JavaMailSender mailSender;
-
-    public void enviarEmail(EmailOutbox emailOutbox){
-
-        SimpleMailMessage email = new SimpleMailMessage();
-
-        email.setTo(emailOutbox.getTo());
-        email.setFrom(emailOutbox.getTo());
-        email.setSubject(emailOutbox.getSubject());
-        email.setText(emailOutbox.getBody());
-
-        mailSender.send(email);
-
-    }
+//    private final JavaMailSender mailSender;
+//
+//    public void enviarEmail(EmailOutbox emailOutbox){
+//
+//        SimpleMailMessage email = new SimpleMailMessage();
+//
+//        email.setTo(emailOutbox.getTo());
+//        email.setFrom(emailOutbox.getTo());
+//        email.setSubject(emailOutbox.getSubject());
+//        email.setText(emailOutbox.getBody());
+//
+//        mailSender.send(email);
+//
+ //    }
 }

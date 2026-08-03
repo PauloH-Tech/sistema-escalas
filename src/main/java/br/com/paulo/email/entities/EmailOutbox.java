@@ -13,7 +13,9 @@ public class EmailOutbox {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(name = "msg_to")
     private String to;
+    @Column(name = "msg_cc")
     private String cc;
     private String subject;
     @Column(columnDefinition = "TEXT")

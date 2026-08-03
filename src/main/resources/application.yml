@@ -2,7 +2,7 @@ spring:
   application:
     name: controle-escalas
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE}
+    active: ${SPRING_PROFILES_ACTIVE:development}
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
