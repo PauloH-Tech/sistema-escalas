@@ -1,6 +1,6 @@
 package br.com.paulo.escalas.services;
 
-import br.com.paulo.email.entities.services.EmailOutboxService;
+import br.com.paulo.email.services.EmailOutboxService;
 import br.com.paulo.escalas.entities.escalas.EscalaExtra;
 import br.com.paulo.escalas.entities.escalas.EscalaExtraDTO;
 import br.com.paulo.escalas.entities.militares.Militar;

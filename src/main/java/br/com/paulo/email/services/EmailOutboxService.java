@@ -1,14 +1,12 @@
-package br.com.paulo.email.entities.services;
+package br.com.paulo.email.services;
 
 import br.com.paulo.email.entities.EmailOutbox;
 import br.com.paulo.email.entities.EmailStatus;
-import br.com.paulo.email.entities.repositories.EmailRepository;
+import br.com.paulo.email.repositories.EmailRepository;
 import br.com.paulo.escalas.entities.escalas.EscalaExtra;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service

@@ -1,4 +1,4 @@
-package br.com.paulo.email.entities.repositories;
+package br.com.paulo.email.repositories;
 
 import br.com.paulo.email.entities.EmailOutbox;
 import org.springframework.data.jpa.repository.JpaRepository;

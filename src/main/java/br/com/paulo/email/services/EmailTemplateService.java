@@ -1,4 +1,4 @@
-package br.com.paulo.email.entities.services;
+package br.com.paulo.email.services;
 
 import br.com.paulo.escalas.entities.escalas.EscalaExtra;
 import org.springframework.stereotype.Service;
