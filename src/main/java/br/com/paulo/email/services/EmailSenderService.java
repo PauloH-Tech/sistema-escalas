@@ -40,6 +40,7 @@ public class EmailSenderService {
             email.setStatus(EmailStatus.ERRO);
             email.setTentativas(email.getTentativas() + 1);
             email.setErro(e.getMessage());
+            e.printStackTrace();
         }
 
         emailRepository.save(email);

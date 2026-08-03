@@ -13,6 +13,6 @@ import java.util.UUID;
 public interface EmailRepository extends JpaRepository<EmailOutbox, UUID> {
 
 
-    @Query("select e from EmailOutbox e where e.status = 'PENDENTES' or (e.status = 'ERRO' and e.tentativas < 4")
+    @Query(value = "select e from EmailOutbox e where e.status = 'PENDENTE' or (e.status = 'ERRO' and e.tentativas < 4) limit 1")
     List<EmailOutbox> findEmailsPendentes();
 }
