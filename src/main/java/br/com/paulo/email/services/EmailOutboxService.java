@@ -20,6 +20,7 @@ public class EmailOutboxService {
     public void salvarEmail(EscalaExtra escala) {
         EmailOutbox email = new EmailOutbox();
         email.setTo("paulohsantos2005@gmail.com");
+        email.setSubject("NOVA ESCALA AGENDADA");
 //        email.setTo(escala.getMilitar().getEmail());
 //        se precisar mandar cc -> colocar o escalador;
         email.setBody(templateService.montarTemplateEscala(escala));

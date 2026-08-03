@@ -21,6 +21,7 @@ public class EmailOutbox {
     @Column(columnDefinition = "TEXT")
     private String body;
     private int tentativas;
+    @Enumerated(EnumType.STRING)
     private EmailStatus status;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataEnvio;
