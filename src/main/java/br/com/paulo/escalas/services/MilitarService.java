@@ -25,6 +25,7 @@ public class MilitarService {
         militar.setNome(dto.nome());
         militar.setSt_ativo(dto.stAtivo());
         militar.setGraduacao(dto.graduacao());
+        militar.setEmail(dto.email());
 
         repository.save(militar);
 
@@ -38,6 +39,7 @@ public class MilitarService {
             militar.setNome(dto.nome());
             militar.setGraduacao(dto.graduacao());
             militar.setSt_ativo(dto.stAtivo());
+            militar.setEmail(dto.email());
 
             repository.save(militar);
         }
