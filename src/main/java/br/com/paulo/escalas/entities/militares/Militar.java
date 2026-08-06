@@ -22,4 +22,6 @@ public class Militar {
 
     private Graduacao graduacao;
 
+    private String email;
+
 }
