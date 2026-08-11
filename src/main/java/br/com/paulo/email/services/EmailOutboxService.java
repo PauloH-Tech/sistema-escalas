@@ -19,15 +19,18 @@ public class EmailOutboxService {
 
     public void salvarEmail(EscalaExtra escala) {
         EmailOutbox email = new EmailOutbox();
-        email.setTo("paulohsantos2005@gmail.com");
+        if(escala.getMilitar().getEmail() == null) {
+            email.setTo("paulohsantos2005@gmail.com");
+        } else {
+            email.setTo(escala.getMilitar().getEmail());
+        }
         email.setSubject("NOVA ESCALA AGENDADA");
-//        email.setTo(escala.getMilitar().getEmail());
 //        se precisar mandar cc -> colocar o escalador;
         email.setBody(templateService.montarTemplateEscala(escala));
         email.setDataCriacao(LocalDateTime.now());
         email.setStatus(EmailStatus.PENDENTE);
 
-        System.out.println(email);
+//        System.out.println(email);
         emailRepository.save(email);
 
     }
