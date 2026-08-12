@@ -1,0 +1,2 @@
+ALTER TABLE militares
+ADD COLUMN email VARCHAR(128);

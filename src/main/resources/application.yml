@@ -2,7 +2,7 @@ spring:
   application:
     name: controle-escalas
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE}
+    active: ${SPRING_PROFILES_ACTIVE:development}
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -10,6 +10,20 @@ spring:
 #  port: 8082
   flyway:
     baseline-on-migrate: true
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+send-email: ${SEND_EMAIL}
 
 
 ---
