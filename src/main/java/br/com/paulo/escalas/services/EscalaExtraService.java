@@ -60,7 +60,10 @@ public class EscalaExtraService {
         if (existsRodada) {
             return escalaRepository.listaOrdenada(date);
         }
-
         throw new RodadaNotFoundException(date.toString());
+    }
+
+    public void deletarEscalado(UUID id) {
+        escalaRepository.deleteById(id);
     }
 }
