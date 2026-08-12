@@ -11,6 +11,7 @@ import br.com.paulo.escalas.repositories.EscalaExtraRepository;
 import br.com.paulo.escalas.repositories.MilitarRepository;
 import br.com.paulo.escalas.repositories.RodadaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,6 @@ import java.util.UUID;
 @Service
 public class EscalaExtraService {
 
-
     @Autowired
     private EscalaExtraRepository escalaRepository;
     @Autowired
@@ -30,6 +30,9 @@ public class EscalaExtraService {
     private RodadaRepository rodadaRepository;
     @Autowired
     private EmailOutboxService emailOutboxService;
+
+    @Value("${send-email}")
+    private boolean sendEmail;
 
 
     @Transactional
@@ -44,7 +47,9 @@ public class EscalaExtraService {
             escala.setRodada(rodadaEscala);
             escalaRepository.save(escala);
 
-            emailOutboxService.salvarEmail(escala);
+            if(sendEmail) {
+                emailOutboxService.salvarEmail(escala);
+            }
 
         }
     }
