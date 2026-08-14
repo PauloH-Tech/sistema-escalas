@@ -31,4 +31,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
 
+    @ExceptionHandler(MilitarNotFoundException.class)
+    public ResponseEntity<ErroResposta> handleMilitarNotFound(MilitarNotFoundException ex) {
+        String message = "Militar não encontrado: " + ex.getMessage();
+        ErroResposta erro = new ErroResposta(HttpStatus.NOT_FOUND.value(), message);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
 }

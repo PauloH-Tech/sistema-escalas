@@ -2,6 +2,7 @@ package br.com.paulo.escalas.services;
 
 import br.com.paulo.escalas.entities.rodadas.RodadaDTO;
 import br.com.paulo.escalas.entities.rodadas.RodadaEscala;
+import br.com.paulo.escalas.exceptions.RodadaNotFoundException;
 import br.com.paulo.escalas.repositories.RodadaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,8 @@ public class RodadaService {
     private RodadaRepository repository;
 
     public void cadastrarRodada(RodadaDTO dto){
-        //int nrRodada = repository.findMaxNumeroRodada() + 1;
-
         RodadaEscala novaRodada = new RodadaEscala();
         novaRodada.setData(dto.data());
-        //novaRodada.setNumeroRodada(nrRodada);
 
         repository.save(novaRodada);
     }
@@ -34,6 +32,10 @@ public class RodadaService {
     }
 
     public void deletar(UUID id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (Exception e) {
+            throw new RodadaNotFoundException(e.getMessage());
+        }
     }
 }

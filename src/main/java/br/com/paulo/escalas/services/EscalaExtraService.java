@@ -64,6 +64,10 @@ public class EscalaExtraService {
     }
 
     public void deletarEscalado(UUID id) {
-        escalaRepository.deleteById(id);
+        try {
+            escalaRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RodadaNotFoundException(id.toString());
+        }
     }
 }

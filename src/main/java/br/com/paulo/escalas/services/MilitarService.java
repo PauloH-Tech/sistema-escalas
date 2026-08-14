@@ -2,6 +2,7 @@ package br.com.paulo.escalas.services;
 
 import br.com.paulo.escalas.entities.militares.Militar;
 import br.com.paulo.escalas.entities.militares.MilitarDTO;
+import br.com.paulo.escalas.exceptions.MilitarNotFoundException;
 import br.com.paulo.escalas.repositories.MilitarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class MilitarService {
     }
 
     public void atualizar(UUID id, MilitarDTO dto) {
-        Militar militar = repository.findById(id).orElseThrow(() -> new RuntimeException("Militar não encontrado"));
+        Militar militar = repository.findById(id).orElseThrow(() -> new MilitarNotFoundException(id.toString()));
 
         if (militar != null){
             militar.setNome(dto.nome());
@@ -46,7 +47,7 @@ public class MilitarService {
     }
 
     public void deletar(UUID id) {
-        Militar militar = repository.findById(id).orElseThrow(() -> new RuntimeException("Militar não encontrado"));
+        Militar militar = repository.findById(id).orElseThrow(() -> new MilitarNotFoundException(id.toString()));
         if (militar != null) {
             repository.deleteById(id);
         }
