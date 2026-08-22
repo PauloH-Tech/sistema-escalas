@@ -18,7 +18,7 @@ public class Militar {
     private String nome;
 
     @Column(nullable = false)
-    private Boolean st_ativo;
+    private Boolean st_ativo = true;
 
     private Graduacao graduacao;
 

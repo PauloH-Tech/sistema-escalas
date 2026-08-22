@@ -33,6 +33,7 @@ public class RodadaController {
         return ResponseEntity.ok(escalas);
     }
 
+    //TODO: deveria retornar escalas onde não tem militares escalados?
     @GetMapping("/proximas")
     public ResponseEntity<List<RodadaEscala>> proximasRodadas(){
         List<RodadaEscala> nextEscalas = service.listarProximasRodadas();

@@ -17,8 +17,8 @@ public class MilitarService {
     private MilitarRepository repository;
 
 
-    public List<Militar> listarMilitares() {
-        return repository.findAllByOrderByGraduacaoDesc();
+    public List<Militar> listarMilitaresAtivos() {
+        return repository.buscaTodosMilitaresAtivos();
     }
 
     public UUID cadastrar(MilitarDTO dto) {
@@ -34,7 +34,8 @@ public class MilitarService {
     }
 
     public void atualizar(UUID id, MilitarDTO dto) {
-        Militar militar = repository.findById(id).orElseThrow(() -> new MilitarNotFoundException(id.toString()));
+        Militar militar = repository.findById(id).orElseThrow(
+                () -> new MilitarNotFoundException("Militar com id " + id.toString() + " não encontrado no banco de dados"));
 
         if (militar != null){
             militar.setNome(dto.nome());
@@ -46,10 +47,13 @@ public class MilitarService {
         }
     }
 
-    public void deletar(UUID id) {
-        Militar militar = repository.findById(id).orElseThrow(() -> new MilitarNotFoundException(id.toString()));
+    //TODO: PSQLException causa erro de constraint se tiver escalado ja
+    public void inativar(UUID id) {
+        Militar militar = repository.findById(id).orElseThrow(
+                () -> new MilitarNotFoundException("Militar com id " + id.toString() + " não encontrado no banco de dados"));
         if (militar != null) {
-            repository.deleteById(id);
+            militar.setSt_ativo(false);
+            repository.save(militar);
         }
     }
 }

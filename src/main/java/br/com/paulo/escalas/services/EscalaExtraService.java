@@ -60,14 +60,14 @@ public class EscalaExtraService {
         if (existsRodada) {
             return escalaRepository.listaOrdenada(date);
         }
-        throw new RodadaNotFoundException(date.toString());
+        throw new RodadaNotFoundException("Rodada com a data " + date + " não encontrada no banco de dados");
     }
 
     public void deletarEscalado(UUID id) {
         try {
             escalaRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RodadaNotFoundException(id.toString());
+            throw new RodadaNotFoundException("Rodada com id " + id.toString() + " não encontrada no banco de dados");
         }
     }
 }
