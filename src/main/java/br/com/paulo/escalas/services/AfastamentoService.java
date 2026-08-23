@@ -43,4 +43,14 @@ public class AfastamentoService {
     public List<Afastamento> listar() {
         return afastamentoRepository.findAll();
     }
+
+    public void deletar(UUID id) {
+        boolean exists = afastamentoRepository.existsById(id);
+        if (!exists) {
+            //TODO: criar exception
+            throw new RuntimeException("Id não existe: " + id.toString());
+
+        }
+        afastamentoRepository.deleteById(id);
+    }
 }
