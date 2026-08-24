@@ -23,6 +23,11 @@ public class MilitarController {
         return ResponseEntity.ok(service.listarMilitaresAtivos());
     }
 
+    @GetMapping("/inativos")
+    public ResponseEntity<?> listarInativos(){
+        return ResponseEntity.ok(service.listarMilitaresInativos());
+    }
+
     @PostMapping
     public ResponseEntity<?> cadatrarMilitar(@RequestBody MilitarDTO dto) {
         service.cadastrar(dto);
@@ -38,6 +43,11 @@ public class MilitarController {
     @PatchMapping("/{id}/inativar")
     public ResponseEntity<?> inativarMilitar(@PathVariable UUID id){
         service.inativar(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+    @PatchMapping("/{id}/ativar")
+    public ResponseEntity<?> AtivarMilitar(@PathVariable UUID id){
+        service.ativar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

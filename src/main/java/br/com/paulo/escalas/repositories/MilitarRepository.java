@@ -13,4 +13,7 @@ public interface MilitarRepository extends JpaRepository<Militar, UUID> {
 
     @Query(value = "select m from Militar m where m.st_ativo = true order by m.graduacao desc")
     List<Militar> buscaTodosMilitaresAtivos();
+
+    @Query(value = "select m from Militar m where m.st_ativo = false order by m.graduacao desc")
+    List<Militar> buscaTodosMilitaresInativos();
 }
