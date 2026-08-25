@@ -1,4 +1,4 @@
-package br.com.paulo.escalas.configs;
+package br.com.paulo.escalas.configs.cors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
