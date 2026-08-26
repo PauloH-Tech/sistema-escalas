@@ -5,6 +5,6 @@ CREATE TABLE IF NOT EXISTS public.usuario
     password character varying(240) NOT NULL,
     role character varying(255) NOT NULL,
     ativo boolean DEFAULT true NOT NULL,
-    CONSTRAINT emails_pkey PRIMARY KEY (id)
+    CONSTRAINT users_pkey PRIMARY KEY (id)
 
 );
