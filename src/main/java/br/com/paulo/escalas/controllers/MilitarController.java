@@ -20,7 +20,12 @@ public class MilitarController {
 
     @GetMapping
     public ResponseEntity<List<Militar>> listaMilitar(){
-        return ResponseEntity.ok(service.listarMilitares());
+        return ResponseEntity.ok(service.listarMilitaresAtivos());
+    }
+
+    @GetMapping("/inativos")
+    public ResponseEntity<?> listarInativos(){
+        return ResponseEntity.ok(service.listarMilitaresInativos());
     }
 
     @PostMapping
@@ -35,9 +40,14 @@ public class MilitarController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletarMilitar(@PathVariable UUID id){
-        service.deletar(id);
+    @PatchMapping("/{id}/inativar")
+    public ResponseEntity<?> inativarMilitar(@PathVariable UUID id){
+        service.inativar(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+    @PatchMapping("/{id}/ativar")
+    public ResponseEntity<?> AtivarMilitar(@PathVariable UUID id){
+        service.ativar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

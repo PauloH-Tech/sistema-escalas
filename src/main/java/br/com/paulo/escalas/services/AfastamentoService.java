@@ -3,6 +3,8 @@ package br.com.paulo.escalas.services;
 import br.com.paulo.escalas.entities.afastamentos.Afastamento;
 import br.com.paulo.escalas.entities.afastamentos.AfastamentoDTO;
 import br.com.paulo.escalas.entities.militares.Militar;
+import br.com.paulo.escalas.exceptions.MilitarInativoException;
+import br.com.paulo.escalas.exceptions.MilitarNotFoundException;
 import br.com.paulo.escalas.repositories.AfastamentoRepository;
 import br.com.paulo.escalas.repositories.MilitarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,11 @@ public class AfastamentoService {
 
 
     public void cadastrarAfastamento(UUID idMilitar, AfastamentoDTO dto){
-        Militar militar = militarRepository.findById(idMilitar).orElse(null);
+        Militar militar = militarRepository.findById(idMilitar)
+                .orElseThrow(() -> new MilitarNotFoundException(idMilitar.toString()));
+        if (!militar.getSt_ativo()) {
+            throw new MilitarInativoException("Não foi possível criar um afastamento pois este militar está inativo");
+        }
 
         Afastamento novoAfastamento = new Afastamento();
         novoAfastamento.setMilitar(militar);
@@ -36,5 +42,15 @@ public class AfastamentoService {
 
     public List<Afastamento> listar() {
         return afastamentoRepository.findAll();
+    }
+
+    public void deletar(UUID id) {
+        boolean exists = afastamentoRepository.existsById(id);
+        if (!exists) {
+            //TODO: criar exception
+            throw new RuntimeException("Id não existe: " + id.toString());
+
+        }
+        afastamentoRepository.deleteById(id);
     }
 }

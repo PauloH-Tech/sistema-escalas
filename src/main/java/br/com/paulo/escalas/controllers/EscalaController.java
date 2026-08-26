@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/escala")
@@ -35,6 +36,11 @@ public class EscalaController {
         return ResponseEntity.ok(listaOrdenada);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletarEscalado(@PathVariable UUID id){
+        escalaService.deletarEscalado(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
 
 }

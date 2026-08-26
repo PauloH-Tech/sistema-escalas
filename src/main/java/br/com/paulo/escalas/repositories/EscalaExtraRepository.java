@@ -51,6 +51,7 @@ public interface EscalaExtraRepository extends JpaRepository<EscalaExtra, UUID> 
               LEFT JOIN afastamento a
                 ON a.militar_id = m.id
                AND :dataRodada BETWEEN a.dt_inicio AND a.dt_fim
+             WHERE m.st_ativo = true
              GROUP BY
                    m.id,
                    m.nm_militar,

@@ -25,7 +25,7 @@ public class RodadaEscala {
 //    @Column(name = "nr_rodada", nullable = false)
 //    private int numeroRodada;
 
-    @OneToMany(mappedBy = "rodada")
+    @OneToMany(mappedBy = "rodada", cascade = CascadeType.REMOVE)
 //    @JsonIgnore
     private List<EscalaExtra> escalados;
 

@@ -57,10 +57,18 @@ public class EscalaExtraService {
 
     public List<MilitarPrioridadeDTO> listarMilitaresOrdenados(LocalDate date) {
         boolean existsRodada = rodadaRepository.existsByData(date);
-        if (existsRodada) {
-            return escalaRepository.listaOrdenada(date);
+        if (!existsRodada) {
+            throw new RodadaNotFoundException("Rodada com a data " + date + " não encontrada no banco de dados");
         }
+        return escalaRepository.listaOrdenada(date);
+    }
 
-        throw new RodadaNotFoundException(date.toString());
+    public void deletarEscalado(UUID id) {
+        boolean exists = escalaRepository.existsById(id);
+        if (!exists) {
+            throw new RodadaNotFoundException("Rodada com id " + id.toString() + " não encontrada no banco de dados");
+        }
+        escalaRepository.deleteById(id);
+
     }
 }
