@@ -24,6 +24,10 @@ spring:
             enable: true
 
 send-email: ${SEND_EMAIL}
+api:
+  security:
+    token:
+      secret: "minha-chave-extremamente-super-hiper-mega-secreta"
 
 
 ---
