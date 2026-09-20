@@ -48,27 +48,27 @@ public class MilitarService {
     }
 
     //TODO: PSQLException causa erro de constraint se tiver escalado ja
-    public void inativar(UUID id) {
-        Militar militar = repository.findById(id).orElseThrow(
-                () -> new MilitarNotFoundException("Militar com id " + id.toString() + " não encontrado no banco de dados"));
-        if (militar != null) {
-            militar.setSt_ativo(false);
-            repository.save(militar);
-        }
-    }
+//    public void inativar(UUID id) {
+//        Militar militar = repository.findById(id).orElseThrow(
+//                () -> new MilitarNotFoundException("Militar com id " + id.toString() + " não encontrado no banco de dados"));
+//        if (militar != null) {
+//            militar.setSt_ativo(false);
+//            repository.save(militar);
+//        }
+//    }
 
     public List<Militar> listarMilitaresInativos() {
         return repository.buscaTodosMilitaresInativos();
     }
 
-    public void ativar(UUID id) {
-        Militar militar = repository.findById(id).orElseThrow(
-                () -> new MilitarNotFoundException("Militar com id " + id.toString() + " não encontrado no banco de dados")
-        );
-        if (militar != null) {
-            System.out.println("ativando militar");
-            militar.setSt_ativo(true);
-            repository.save(militar);
-        }
-    }
+//    public void ativar(UUID id) {
+//        Militar militar = repository.findById(id).orElseThrow(
+//                () -> new MilitarNotFoundException("Militar com id " + id.toString() + " não encontrado no banco de dados")
+//        );
+//        if (militar != null) {
+//            System.out.println("ativando militar");
+//            militar.setSt_ativo(true);
+//            repository.save(militar);
+//        }
+//    }
 }

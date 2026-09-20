@@ -2,21 +2,32 @@ package br.com.paulo.escalas.entities.usuarios;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-@Data
+
 @Entity
 @Table(name = "usuario")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    private UUID id;
+
+    @Column(nullable = false)
+    private String nome;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -42,7 +53,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
 
@@ -63,6 +74,23 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return ativo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Usuario outro)) return false;
+        return id != null && id.equals(outro.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getClass());
+    }
+
+    @Override
+    public String toString(){
+        return "Usuario{id=%s, email=%s, role=%s}".formatted(id,email,role);
     }
 }

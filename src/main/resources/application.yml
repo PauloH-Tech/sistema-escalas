@@ -27,8 +27,15 @@ send-email: ${SEND_EMAIL}
 api:
   security:
     token:
-      secret: "minha-chave-extremamente-super-hiper-mega-secreta"
+      secret: "{JWT_SECRET:minha-chave-extremamente-super-hiper-mega-secreta}"
+      expiration-ms: 36000000
+app:
+  admin:
+    email: "{ADMIN_EMAIL}"
+    senha: "{ADMIN_SENHA}"
 
+  cors:
+    origins: http://localhost:5173
 
 ---
 spring:
