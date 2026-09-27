@@ -5,9 +5,10 @@ import br.com.paulo.escalas.entities.usuarios.Usuario;
 
 import java.util.UUID;
 
-public record UsuarioResponseDTO(UUID id, String nome, String email, UserRole role, boolean ativo) {
+public record UsuarioResponseDTO(UUID id, String nome, String email, UserRole role, boolean ativo, UUID militarId) {
 
     public static UsuarioResponseDTO de(Usuario u) {
-        return new UsuarioResponseDTO(u.getId(), u.getNome(), u.getEmail(), u.getRole(), u.isAtivo());
+        UUID militarId = u.getMilitar() != null ? u.getMilitar().getId() : null;
+        return new UsuarioResponseDTO(u.getId(), u.getNome(), u.getEmail(), u.getRole(), u.isAtivo(), militarId);
     }
 }

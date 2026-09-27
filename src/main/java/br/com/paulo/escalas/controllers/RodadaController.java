@@ -2,10 +2,13 @@ package br.com.paulo.escalas.controllers;
 
 import br.com.paulo.escalas.entities.rodadas.RodadaDTO;
 import br.com.paulo.escalas.entities.rodadas.RodadaEscala;
+import br.com.paulo.escalas.entities.usuarios.Usuario;
+import br.com.paulo.escalas.exceptions.RegraDeNegocioException;
 import br.com.paulo.escalas.services.RodadaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,24 +35,20 @@ public class RodadaController {
         return ResponseEntity.ok(escalas);
     }
 
-    @GetMapping("/agendadas/{id}")
-    //no futuro usar o principal -> pegar o usuario
-    public ResponseEntity<?> listarPorMilitar(@PathVariable UUID id) {
-        List<RodadaEscala> escalas = service.rodadasDoMilitar(id);
-        return ResponseEntity.ok(escalas);
+    /** Rodadas do militar vinculado ao usuário logado (árvore do usuário). */
+    @GetMapping("/agendadas")
+    public ResponseEntity<List<RodadaEscala>> minhasRodadas(@AuthenticationPrincipal Usuario usuario) {
+        if (usuario.getMilitar() == null) {
+            throw new RegraDeNegocioException("Usuário não está vinculado a um militar");
+        }
+        return ResponseEntity.ok(service.rodadasDoMilitar(usuario.getMilitar().getId()));
     }
-//    @GetMapping("/agendadas")
-//    //no futuro usar o principal -> pegar o usuario
-//    public ResponseEntity<?> listarPorMilitar() {
-//        var id = UUID.fromString("380bb848-13cd-4fb5-b132-0f5ee18ecabb");
-//        List<RodadaEscala> escalas = service.rodadasDoMilitar(id);
-//        return ResponseEntity.ok(escalas);
-//    }
 
-//    @GetMapping("/agendadas")
-//    public List<RodadaEscala> minhasRodadas(@AuthenticationPrincipal Usuario usuario) {
-//        return rodadaService.rodadasDoMilitar(usuario.getMilitar().getId());
-//    }
+    /** Rodadas de qualquer militar (somente ADMIN, ver SecurityConfig). */
+    @GetMapping("/agendadas/{id}")
+    public ResponseEntity<List<RodadaEscala>> listarPorMilitar(@PathVariable UUID id) {
+        return ResponseEntity.ok(service.rodadasDoMilitar(id));
+    }
 
     //TODO: deveria retornar escalas onde não tem militares escalados?
     @GetMapping("/proximas")

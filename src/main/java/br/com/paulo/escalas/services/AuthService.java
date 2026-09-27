@@ -1,17 +1,16 @@
 package br.com.paulo.escalas.services;
 
+import br.com.paulo.email.services.EmailOutboxService;
+import br.com.paulo.email.services.EmailTemplateService;
 import br.com.paulo.escalas.configs.security.TokenService;
 import br.com.paulo.escalas.entities.usuarios.PasswordResetToken;
-import br.com.paulo.escalas.entities.usuarios.UserRole;
 import br.com.paulo.escalas.entities.usuarios.Usuario;
 import br.com.paulo.escalas.entities.usuarios.dtos.LoginRequestDTO;
-import br.com.paulo.escalas.entities.usuarios.dtos.RegisterDTO;
 import br.com.paulo.escalas.entities.usuarios.dtos.ResetPasswordDTO;
 import br.com.paulo.escalas.entities.usuarios.dtos.TokenResponseDTO;
 import br.com.paulo.escalas.exceptions.RegraDeNegocioException;
 import br.com.paulo.escalas.repositories.PasswordResetTokenRepository;
 import br.com.paulo.escalas.repositories.UsuarioRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.naming.AuthenticationException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -42,6 +40,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
+    private final EmailOutboxService emailOutboxService;
+    private final EmailTemplateService emailTemplateService;
 
 
     public TokenResponseDTO autenticar(LoginRequestDTO dto) {
@@ -61,9 +61,13 @@ public class AuthService {
             reset.setUsuario(usuario);
             reset.setTokenHash(sha256(tokenPuro));
             reset.setExpiracao(LocalDateTime.now().plusMinutes(VALIDADE_RESET_MINUTOS));
+            resetTokenRepository.save(reset);
 
-            // TODO: enviar por e-mail (JavaMailSender). Por enquanto, log.
-            log.info("Token de reset para {}: {}", email, tokenPuro);
+            emailOutboxService.salvarEmail(
+                    usuario.getEmail(),
+                    "REDEFINIÇÃO DE SENHA",
+                    emailTemplateService.montarTemplateResetSenha(usuario.getNome(), tokenPuro, VALIDADE_RESET_MINUTOS));
+            log.info("Reset de senha solicitado para {}", email);
         });
     }
 

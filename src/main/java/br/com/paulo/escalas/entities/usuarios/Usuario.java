@@ -1,7 +1,7 @@
 package br.com.paulo.escalas.entities.usuarios;
 
+import br.com.paulo.escalas.entities.militares.Militar;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,6 +41,11 @@ public class Usuario implements UserDetails {
 
     @Column(nullable = false)
     private boolean ativo;
+
+    /** Militar vinculado ao login. Obrigatório para USER, opcional para ADMIN. */
+    @OneToOne
+    @JoinColumn(name = "militar_id", unique = true)
+    private Militar militar;
 
     @Override
     public String getUsername() {

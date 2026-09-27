@@ -4,6 +4,7 @@ import br.com.paulo.email.entities.EmailOutbox;
 import br.com.paulo.email.repositories.EmailRepository;
 import br.com.paulo.email.services.EmailSenderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,18 +18,17 @@ public class EmailScheduler {
     private final EmailRepository emailRepository;
     private final EmailSenderService emailSenderService;
 
+    @Value("${SEND-EMAIL}")
+    private boolean sendMail;
 
     @Scheduled(fixedRate = 10000)
     public void processarFilaDeEmails() {
-        List<EmailOutbox> emailsPendentes = emailRepository.findEmailsPendentes();
+        if (sendMail) {
+            List<EmailOutbox> emailsPendentes = emailRepository.findEmailsPendentes();
 
-        for(EmailOutbox email : emailsPendentes) {
-            emailSenderService.enviarEmail(email);
+            for (EmailOutbox email : emailsPendentes) {
+                emailSenderService.enviarEmail(email);
+            }
         }
-
-
     }
-
-
-
 }

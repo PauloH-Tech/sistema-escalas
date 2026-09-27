@@ -1,5 +1,6 @@
 package br.com.paulo.escalas.exceptions;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -53,6 +54,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RegraDeNegocioException.class)
     public ResponseEntity<ErrorResponse> regraDeNegocio(RegraDeNegocioException ex) {
         return ResponseEntity.badRequest().body(new ErrorResponse(Instant.now(),400, "BAD REQUEST", ex.getMessage()));
+    }
+
+    /** Violação de UNIQUE/FK no banco (ex.: militar escalado duas vezes na mesma rodada). */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> integridade(DataIntegrityViolationException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(Instant.now(), 409, "CONFLICT", "Registro duplicado ou em uso por outro cadastro"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -53,10 +53,12 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/forgot-password", "/auth/reset-password").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/forgot-password", "/auth/reset-password").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/usuarios/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        // árvore do usuário: somente leitura
+                        .requestMatchers(HttpMethod.GET, "/auth/me", "/rodada/agendadas", "/rodada/proximas").authenticated()
+                        // todo o resto (cadastros, escalas, usuários...) é da árvore do admin
+                        .anyRequest().hasRole("ADMIN")
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((req, res, e) -> responder(res, HttpStatus.UNAUTHORIZED, "Não autenticado"))

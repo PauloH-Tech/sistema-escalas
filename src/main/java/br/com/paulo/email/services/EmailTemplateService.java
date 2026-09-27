@@ -22,5 +22,16 @@ public class EmailTemplateService {
 
     }
 
+    public String montarTemplateResetSenha(String nome, String token, int validadeMinutos) {
+        return """
+                Olá %s,
 
+                Recebemos uma solicitação para redefinir sua senha.
+                Use o código abaixo no aplicativo (válido por %d minutos):
+
+                %s
+
+                Se você não fez essa solicitação, ignore este e-mail.
+                """.formatted(nome, validadeMinutos, token);
+    }
 }

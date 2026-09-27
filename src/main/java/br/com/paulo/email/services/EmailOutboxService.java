@@ -34,4 +34,14 @@ public class EmailOutboxService {
         emailRepository.save(email);
 
     }
+
+    public void salvarEmail(String to, String subject, String body) {
+        EmailOutbox email = new EmailOutbox();
+        email.setTo(to);
+        email.setSubject(subject);
+        email.setBody(body);
+        email.setDataCriacao(LocalDateTime.now());
+        email.setStatus(EmailStatus.PENDENTE);
+        emailRepository.save(email);
+    }
 }
