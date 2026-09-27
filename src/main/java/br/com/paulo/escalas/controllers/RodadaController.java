@@ -1,6 +1,5 @@
 package br.com.paulo.escalas.controllers;
 
-import br.com.paulo.escalas.entities.militares.MilitarDTO;
 import br.com.paulo.escalas.entities.rodadas.RodadaDTO;
 import br.com.paulo.escalas.entities.rodadas.RodadaEscala;
 import br.com.paulo.escalas.services.RodadaService;
@@ -32,6 +31,25 @@ public class RodadaController {
         List<RodadaEscala> escalas = service.listarTodas();
         return ResponseEntity.ok(escalas);
     }
+
+    @GetMapping("/agendadas/{id}")
+    //no futuro usar o principal -> pegar o usuario
+    public ResponseEntity<?> listarPorMilitar(@PathVariable UUID id) {
+        List<RodadaEscala> escalas = service.rodadasDoMilitar(id);
+        return ResponseEntity.ok(escalas);
+    }
+//    @GetMapping("/agendadas")
+//    //no futuro usar o principal -> pegar o usuario
+//    public ResponseEntity<?> listarPorMilitar() {
+//        var id = UUID.fromString("380bb848-13cd-4fb5-b132-0f5ee18ecabb");
+//        List<RodadaEscala> escalas = service.rodadasDoMilitar(id);
+//        return ResponseEntity.ok(escalas);
+//    }
+
+//    @GetMapping("/agendadas")
+//    public List<RodadaEscala> minhasRodadas(@AuthenticationPrincipal Usuario usuario) {
+//        return rodadaService.rodadasDoMilitar(usuario.getMilitar().getId());
+//    }
 
     //TODO: deveria retornar escalas onde não tem militares escalados?
     @GetMapping("/proximas")

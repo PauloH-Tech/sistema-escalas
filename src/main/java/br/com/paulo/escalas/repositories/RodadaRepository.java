@@ -3,6 +3,7 @@ package br.com.paulo.escalas.repositories;
 import br.com.paulo.escalas.entities.rodadas.RodadaEscala;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -28,6 +29,19 @@ public interface RodadaRepository extends JpaRepository<RodadaEscala, UUID> {
     List<RodadaEscala> findNextRodadas();
 
     boolean existsByData(LocalDate date);
+
+    @Query(value = """
+            SELECT re.*
+                  FROM rodada_escala re
+                  WHERE re.data >= CURRENT_DATE - INTERVAL '10 days'
+                    AND EXISTS (
+                        SELECT 1 FROM escala_extra ev
+                        WHERE ev.rodada_id = re.id
+                          AND ev.militar_id = :militarId
+                    )
+                  ORDER BY re.data
+            """, nativeQuery = true)
+    List<RodadaEscala> findRodadasDoMilitar(@Param("militarId") UUID militarId);
 
 //    @Query("SELECT MAX(p.numeroRodada) FROM RodadaEscala p")
 //    int findMaxNumeroRodada();

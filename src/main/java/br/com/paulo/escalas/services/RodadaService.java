@@ -38,4 +38,8 @@ public class RodadaService {
             throw new RodadaNotFoundException(e.getMessage());
         }
     }
+
+    public List<RodadaEscala> rodadasDoMilitar(UUID militar) {
+        return repository.findRodadasDoMilitar(militar);
+    }
 }
