@@ -26,8 +26,7 @@ public class EscalaController {
 
     @PostMapping
     public ResponseEntity<?> cadatrarEscala(@RequestBody EscalaExtraDTO body){
-        escalaService.cadastrar(body);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(escalaService.cadastrar(body));
     }
 
     @GetMapping("/{date}")

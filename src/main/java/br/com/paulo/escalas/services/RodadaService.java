@@ -6,6 +6,7 @@ import br.com.paulo.escalas.exceptions.RegraDeNegocioException;
 import br.com.paulo.escalas.exceptions.RodadaNotFoundException;
 import br.com.paulo.escalas.repositories.RodadaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class RodadaService {
     }
 
     public List<RodadaEscala> listarTodas() {
-        return repository.findAll();
+        return repository.findAll(Sort.by("data").descending());
     }
 
     public void deletar(UUID id) {

@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> credenciais(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponse(Instant.now(),401, "UNAUTHORIZED","E-mail ou senha inválidos"));
+                .body(new ErrorResponse(Instant.now(),401, "UNAUTHORIZED","E-mail ou senha inválidos. Se é seu primeiro acesso, use a opção 'Criar conta'."));
     }
 
     @ExceptionHandler(DisabledException.class)

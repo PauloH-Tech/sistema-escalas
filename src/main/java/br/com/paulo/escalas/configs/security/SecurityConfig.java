@@ -53,7 +53,8 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/forgot-password", "/auth/reset-password").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/forgot-password", "/auth/reset-password",
+                                "/auth/primeiro-acesso", "/auth/primeiro-acesso/confirmar").permitAll()
                         .requestMatchers("/error").permitAll()
                         // árvore do usuário: somente leitura
                         .requestMatchers(HttpMethod.GET, "/auth/me", "/rodada/agendadas", "/rodada/proximas").authenticated()

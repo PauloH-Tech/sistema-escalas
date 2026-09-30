@@ -14,6 +14,6 @@ public record TokenResponseDTO(
 ) {
     public static TokenResponseDTO de(String token, Usuario usuario) {
         UUID militarId = usuario.getMilitar() != null ? usuario.getMilitar().getId() : null;
-        return new TokenResponseDTO(token, "Bearer", usuario.getNome(), usuario.getRole(), militarId);
+        return new TokenResponseDTO(token, "Bearer", usuario.getNomeExibicao(), usuario.getRole(), militarId);
     }
 }

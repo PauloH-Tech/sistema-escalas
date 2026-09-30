@@ -26,13 +26,13 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
+    /** Nome de exibição no app (ex.: nome completo). Definido pelo militar no primeiro acesso. */
     private String nome;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    /** Nulo enquanto o primeiro acesso não foi concluído. */
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -46,6 +46,16 @@ public class Usuario implements UserDetails {
     @OneToOne
     @JoinColumn(name = "militar_id", unique = true)
     private Militar militar;
+
+    public boolean isPrimeiroAcessoPendente() {
+        return password == null;
+    }
+
+    /** Nome para exibir no app; antes do primeiro acesso usa o nome de guerra do militar. */
+    public String getNomeExibicao() {
+        if (nome != null) return nome;
+        return militar != null ? militar.getNome() : email;
+    }
 
     @Override
     public String getUsername() {

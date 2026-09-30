@@ -27,6 +27,19 @@ public class AuthController {
         return UsuarioResponseDTO.de(usuario);
     }
 
+    /** Militar informa o e-mail cadastrado pelo admin e recebe um código. */
+    @PostMapping("/primeiro-acesso")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void primeiroAcesso(@RequestBody @Valid ForgotPasswordDTO dto) {
+        authService.solicitarPrimeiroAcesso(dto.email());
+    }
+
+    /** Militar envia código + nome de exibição + senha; já sai logado. */
+    @PostMapping("/primeiro-acesso/confirmar")
+    public TokenResponseDTO confirmarPrimeiroAcesso(@RequestBody @Valid PrimeiroAcessoDTO dto) {
+        return authService.confirmarPrimeiroAcesso(dto);
+    }
+
     @PostMapping("/forgot-password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void esqueciSenha(@RequestBody @Valid ForgotPasswordDTO dto) {

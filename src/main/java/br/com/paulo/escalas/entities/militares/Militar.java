@@ -23,7 +23,4 @@ public class Militar {
     @Column(nullable = false)
     private Graduacao graduacao;
 
-    @Column(length = 128)
-    private String email;
-
 }

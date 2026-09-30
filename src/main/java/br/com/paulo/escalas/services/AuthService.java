@@ -6,6 +6,7 @@ import br.com.paulo.escalas.configs.security.TokenService;
 import br.com.paulo.escalas.entities.usuarios.PasswordResetToken;
 import br.com.paulo.escalas.entities.usuarios.Usuario;
 import br.com.paulo.escalas.entities.usuarios.dtos.LoginRequestDTO;
+import br.com.paulo.escalas.entities.usuarios.dtos.PrimeiroAcessoDTO;
 import br.com.paulo.escalas.entities.usuarios.dtos.ResetPasswordDTO;
 import br.com.paulo.escalas.entities.usuarios.dtos.TokenResponseDTO;
 import br.com.paulo.escalas.exceptions.RegraDeNegocioException;
@@ -46,40 +47,108 @@ public class AuthService {
 
     public TokenResponseDTO autenticar(LoginRequestDTO dto) {
         Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(dto.email(), dto.senha())
+                new UsernamePasswordAuthenticationToken(normalizarEmail(dto.email()), dto.senha())
         );
         Usuario usuario = (Usuario) auth.getPrincipal();
         return TokenResponseDTO.de(tokenService.gerarToken(usuario), usuario);
     }
 
+    /**
+     * Envia o código de primeiro acesso. Responde igual exista ou não o e-mail,
+     * para não revelar quais e-mails estão cadastrados.
+     */
+    @Transactional
+    public void solicitarPrimeiroAcesso(String email) {
+        usuarioRepository.findByEmail(normalizarEmail(email))
+                .filter(Usuario::isAtivo)
+                .ifPresentOrElse(
+                        usuario -> {
+                            if (!usuario.isPrimeiroAcessoPendente()) {
+                                throw new RegraDeNegocioException("E-mail já criado, tente redefinir a senha");
+                            }
+                            enviarCodigoPrimeiroAcesso(usuario);
+                        },
+                        () -> {
+                            //TODO: talvez recebera essa mensagem se primeiro acesso for false
+                            throw new RegraDeNegocioException("E-mail não cadastrado previamente. Entre em contato com o administrador.");
+                        });
+    }
+
+    @Transactional
+    public TokenResponseDTO confirmarPrimeiroAcesso(PrimeiroAcessoDTO dto) {
+        PasswordResetToken codigo = consumirCodigo(dto.token());
+        Usuario usuario = codigo.getUsuario();
+        if (!usuario.isPrimeiroAcessoPendente()) {
+            throw new RegraDeNegocioException("Primeiro acesso já concluído. Use 'Esqueci minha senha'.");
+        }
+        usuario.setNome(dto.nome().trim());
+        usuario.setPassword(passwordEncoder.encode(dto.senha()));
+        // já devolve o token para o app entrar direto, sem pedir login de novo
+        return TokenResponseDTO.de(tokenService.gerarToken(usuario), usuario);
+    }
+
     @Transactional
     public void solicitarResetSenha(String email) {
-        usuarioRepository.findByEmail(email).ifPresent(usuario -> {
-            String tokenPuro = gerarTokenAleatorio();
-
-            PasswordResetToken reset = new PasswordResetToken();
-            reset.setUsuario(usuario);
-            reset.setTokenHash(sha256(tokenPuro));
-            reset.setExpiracao(LocalDateTime.now().plusMinutes(VALIDADE_RESET_MINUTOS));
-            resetTokenRepository.save(reset);
-
-            emailOutboxService.salvarEmail(
-                    usuario.getEmail(),
-                    "REDEFINIÇÃO DE SENHA",
-                    emailTemplateService.montarTemplateResetSenha(usuario.getNome(), tokenPuro, VALIDADE_RESET_MINUTOS));
-            log.info("Reset de senha solicitado para {}", email);
-        });
+        usuarioRepository.findByEmail(normalizarEmail(email))
+                .filter(Usuario::isAtivo)
+                .ifPresentOrElse(usuario -> {
+                    // quem ainda não fez o primeiro acesso recebe o código de primeiro acesso
+                    if (usuario.isPrimeiroAcessoPendente()) {
+                        throw new RegraDeNegocioException("Primeiro acesso não realizado, crie sua conta primeiro");
+                    }
+                    String tokenPuro = gerarCodigo(usuario);
+                    emailOutboxService.salvarEmail(
+                            usuario.getEmail(),
+                            "REDEFINIÇÃO DE SENHA",
+                            emailTemplateService.montarTemplateResetSenha(usuario.getNomeExibicao(), tokenPuro, VALIDADE_RESET_MINUTOS));
+                    log.info("Reset de senha solicitado para {}, token: {}", email, tokenPuro);
+                }, () -> {throw new RegraDeNegocioException("E-mail não cadastrado.");});
     }
 
     @Transactional
     public void resetarSenha(ResetPasswordDTO dto) {
-        PasswordResetToken reset = resetTokenRepository
-                .findByTokenHash(sha256(dto.token()))
-                .filter(PasswordResetToken::isValido)
-                .orElseThrow(() -> new RegraDeNegocioException("Token inválido ou expirado"));
+        PasswordResetToken reset = consumirCodigo(dto.token());
         Usuario usuario = reset.getUsuario();
+        if (usuario.isPrimeiroAcessoPendente()) {
+            throw new RegraDeNegocioException("Conclua o primeiro acesso para definir sua senha");
+        }
         usuario.setPassword(passwordEncoder.encode(dto.novaSenha()));
-        reset.setUsado(true);
+    }
+
+    private void enviarCodigoPrimeiroAcesso(Usuario usuario) {
+        String tokenPuro = gerarCodigo(usuario);
+        emailOutboxService.salvarEmail(
+                usuario.getEmail(),
+                "PRIMEIRO ACESSO",
+                emailTemplateService.montarTemplatePrimeiroAcesso(usuario.getNomeExibicao(), tokenPuro, VALIDADE_RESET_MINUTOS));
+        log.info("Primeiro acesso solicitado para {}, token: {}", usuario.getEmail(), tokenPuro);
+    }
+
+    /**
+     * Gera e persiste um código de uso único; retorna o valor puro (só o hash vai para o banco).
+     */
+    private String gerarCodigo(Usuario usuario) {
+        String tokenPuro = gerarTokenAleatorio();
+        PasswordResetToken codigo = new PasswordResetToken();
+        codigo.setUsuario(usuario);
+        codigo.setTokenHash(sha256(tokenPuro));
+        codigo.setExpiracao(LocalDateTime.now().plusMinutes(VALIDADE_RESET_MINUTOS));
+        resetTokenRepository.save(codigo);
+        return tokenPuro;
+    }
+
+    private PasswordResetToken consumirCodigo(String tokenPuro) {
+        PasswordResetToken codigo = resetTokenRepository
+                .findByTokenHash(sha256(tokenPuro.trim()))
+                .filter(PasswordResetToken::isValido)
+                .filter(c -> c.getUsuario().isAtivo())
+                .orElseThrow(() -> new RegraDeNegocioException("Código inválido ou expirado"));
+        codigo.setUsado(true);
+        return codigo;
+    }
+
+    private static String normalizarEmail(String email) {
+        return email == null ? null : email.trim().toLowerCase();
     }
 
     private String gerarTokenAleatorio() {

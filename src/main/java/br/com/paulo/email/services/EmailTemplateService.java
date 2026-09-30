@@ -34,4 +34,18 @@ public class EmailTemplateService {
                 Se você não fez essa solicitação, ignore este e-mail.
                 """.formatted(nome, validadeMinutos, token);
     }
+
+    public String montarTemplatePrimeiroAcesso(String nome, String token, int validadeMinutos) {
+        return """
+                Olá %s,
+
+                Seu acesso ao sistema de escalas foi liberado.
+                No aplicativo, em "Primeiro acesso", informe o código abaixo
+                para cadastrar seu nome e sua senha (válido por %d minutos):
+
+                %s
+
+                Se você não fez essa solicitação, ignore este e-mail.
+                """.formatted(nome, validadeMinutos, token);
+    }
 }

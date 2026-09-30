@@ -1,5 +1,7 @@
 package br.com.paulo.escalas.controllers;
 
+import br.com.paulo.escalas.entities.usuarios.dtos.AtualizarAcessoDTO;
+import br.com.paulo.escalas.entities.usuarios.dtos.ConcederAcessoDTO;
 import br.com.paulo.escalas.entities.usuarios.dtos.RegisterDTO;
 import br.com.paulo.escalas.entities.usuarios.dtos.UsuarioResponseDTO;
 import br.com.paulo.escalas.services.UsuarioService;
@@ -25,6 +27,18 @@ public class UsuarioController {
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioResponseDTO criar(@RequestBody @Valid RegisterDTO dto) {
         return usuarioService.criar(dto);
+    }
+
+    /** Concede acesso ao app a um militar (usuário sem senha, aguardando primeiro acesso). */
+    @PostMapping("/acesso")
+    @ResponseStatus(HttpStatus.CREATED)
+    public UsuarioResponseDTO concederAcesso(@RequestBody @Valid ConcederAcessoDTO dto) {
+        return usuarioService.concederAcesso(dto);
+    }
+
+    @PutMapping("/{id}")
+    public UsuarioResponseDTO atualizarAcesso(@PathVariable UUID id, @RequestBody @Valid AtualizarAcessoDTO dto) {
+        return usuarioService.atualizarAcesso(id, dto);
     }
 
     @GetMapping
