@@ -26,6 +26,9 @@ services:
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
       SEND_EMAIL: ${SEND_EMAIL}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_SENHA: ${ADMIN_SENHA}
     ports:
       - ${SERVER_PORT:-8080}:8080
     depends_on:

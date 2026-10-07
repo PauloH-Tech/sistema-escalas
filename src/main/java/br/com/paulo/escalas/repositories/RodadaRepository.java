@@ -14,15 +14,12 @@ import java.util.UUID;
 public interface RodadaRepository extends JpaRepository<RodadaEscala, UUID> {
 
     @Query(value = """
-            SELECT *
+            SELECT re.*
             FROM rodada_escala re
-            WHERE re.data > COALESCE(
-                (
-                    SELECT MAX(r.data)
-                    FROM escala_extra ee
-                    JOIN rodada_escala r ON r.id = ee.rodada_id
-                ),
-                DATE '1900-01-01'
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM escala_extra ee
+                WHERE ee.rodada_id = re.id
             )
             ORDER BY re.data;
             """, nativeQuery = true)

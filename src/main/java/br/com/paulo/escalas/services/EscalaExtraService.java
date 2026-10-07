@@ -6,6 +6,9 @@ import br.com.paulo.escalas.entities.escalas.EscalaExtraDTO;
 import br.com.paulo.escalas.entities.militares.Militar;
 import br.com.paulo.escalas.entities.militares.MilitarPrioridadeDTO;
 import br.com.paulo.escalas.entities.rodadas.RodadaEscala;
+import br.com.paulo.escalas.exceptions.MilitarInativoException;
+import br.com.paulo.escalas.exceptions.MilitarNotFoundException;
+import br.com.paulo.escalas.exceptions.RegraDeNegocioException;
 import br.com.paulo.escalas.exceptions.RodadaNotFoundException;
 import br.com.paulo.escalas.repositories.EscalaExtraRepository;
 import br.com.paulo.escalas.repositories.MilitarRepository;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,22 +40,31 @@ public class EscalaExtraService {
 
 
     @Transactional
-    public void cadastrar(EscalaExtraDTO escalados){
-        RodadaEscala rodadaEscala = rodadaRepository.getReferenceById(escalados.rodadaId());
+    public List<EscalaExtra> cadastrar(EscalaExtraDTO dto){
+        RodadaEscala rodada = rodadaRepository.findById(dto.rodadaId())
+                .orElseThrow(() -> new RegraDeNegocioException("Rodada " + dto.rodadaId() + "não encontrada"));
 
-        for (UUID militarEscalado : escalados.militarIds()){
-            Militar militar = militarRepository.getReferenceById(militarEscalado);
+        List<EscalaExtra> criadas = new ArrayList<>();
+        for (UUID militarId : dto.militarIds()){
+            if (escalaRepository.existsByMilitarIdAndRodadaId(militarId, rodada.getId())) {
+                throw new RegraDeNegocioException("Militar já está escalado nesta rodada");
+            }
+            Militar militar = militarRepository.findById(militarId)
+                    .orElseThrow(() -> new MilitarNotFoundException("Militar " + militarId + "não encontrado"));
+            if (!Boolean.TRUE.equals(militar.getSt_ativo())) {
+                throw new MilitarInativoException("Militar " + militar.getNome() + "está inativo");
+            }
 
             EscalaExtra escala = new EscalaExtra();
             escala.setMilitar(militar);
-            escala.setRodada(rodadaEscala);
-            escalaRepository.save(escala);
+            escala.setRodada(rodada);
+            criadas.add(escalaRepository.save(escala));
 
             if(sendEmail) {
                 emailOutboxService.salvarEmail(escala);
             }
-
         }
+        return criadas;
     }
 
 

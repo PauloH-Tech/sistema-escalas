@@ -66,4 +66,5 @@ public interface EscalaExtraRepository extends JpaRepository<EscalaExtra, UUID> 
             @Param(value = "dataRodada")LocalDate dataRodada
             );
 
+    boolean existsByMilitarIdAndRodadaId(UUID militarId, UUID id);
 }

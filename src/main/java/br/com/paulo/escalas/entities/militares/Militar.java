@@ -20,8 +20,7 @@ public class Militar {
     @Column(nullable = false)
     private Boolean st_ativo = true;
 
+    @Column(nullable = false)
     private Graduacao graduacao;
-
-    private String email;
 
 }

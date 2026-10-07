@@ -6,10 +6,11 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      # Flyway cria o schema; o Hibernate só confere se as entidades batem com o banco
+      ddl-auto: validate
 #server:
 #  port: 8082
-  flyway:
-    baseline-on-migrate: true
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
@@ -24,7 +25,18 @@ spring:
             enable: true
 
 send-email: ${SEND_EMAIL}
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:minha-chave-extremamente-super-hiper-mega-secreta}
+      expiration-ms: 36000000
+app:
+  admin:
+    email: ${ADMIN_EMAIL:}
+    senha: ${ADMIN_SENHA:}
 
+  cors:
+    origins: http://localhost:5173
 
 ---
 spring:
@@ -36,8 +48,6 @@ spring:
     driver-class-name: org.postgresql.Driver
     password: ${DATASOURCE_PASSWORD}
     username: ${DATASOURCE_USERNAME}
-    hibernate:
-      ddl-auto: none
   jpa:
     show-sql: false
 
@@ -52,8 +62,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     password:  ${DATASOURCE_PASSWORD:postgres}
     username: ${DATASOURCE_USERNAME:postgres}
-    hibernate:
-      ddl-auto: none
+  jpa:
     show-sql: true
   output:
     ansi:
